@@ -9,19 +9,108 @@
   --inter: "Inter", sans-serif;
   line-height: 1.5;
   font-weight: 400;
-
-  color-scheme: light dark;
-  color: rgba(255, 255, 255, 0.87);
-  background-color: #242424;
-
-  font-synthesis: none;
-  text-rendering: optimizeLegibility;
-  -webkit-font-smoothing: antialiased;
-  -moz-osx-font-smoothing: grayscale;
 }
 
 * {
   font-family: "Plus Jakarta Sans", sans-serif;
   font-weight: 400;
   font-style: normal;
+}
+
+button {
+  background: #002564;
+}
+
+.swing-in-top-fwd {
+  animation: swing-in-top-fwd 0.5s cubic-bezier(0.175, 0.885, 0.32, 1.275) both;
+}
+
+@keyframes swing-in-top-fwd {
+  0% {
+    transform: rotateX(-100deg);
+    transform-origin: top;
+    opacity: 0;
+  }
+  100% {
+    transform: rotateX(0deg);
+    transform-origin: top;
+    opacity: 1;
+  }
+}
+
+.Toastify__toast-container--top-center,
+.Toastify__toast-container--top-left,
+.Toastify__toast-container--top-right,
+.Toastify__toast-container--bottom-center,
+.Toastify__toast-container--bottom-left,
+.Toastify__toast-container--bottom-right {
+  width: auto !important;
+}
+
+.Toastify__toast-body {
+  font-family: "Plus Jakarta Sans", sans-serif;
+  color: #000000;
+  font-size: 14px;
+  width: auto;
+  font-weight: 400;
+  z-index: 1000 !important;
+}
+
+.Toastify__toast > button > svg {
+  display: none;
+}
+
+.Toastify__toast,
+.Toastify__toast--error,
+.Toastify__toast--success,
+.Toastify__toast--warning,
+.Toastify__toast--info {
+  font-family: "Plus Jakarta Sans", sans-serif !important;
+  border-radius: 10px !important;
+  background: #ffffff !important;
+  padding: 0 20px !important;
+  font-size: 14px !important;
+  width: 100% !important;
+}
+
+.Toastify__toast::before,
+.Toastify__toast--error::before,
+.Toastify__toast--success::before,
+.Toastify__toast--warning::before,
+.Toastify__toast--info::before {
+  position: relative;
+  z-index: 100000;
+  left: 12px;
+  top: 6px;
+}
+
+.Toastify__toast::after .Toastify__toast--error::after,
+.Toastify__toast--success::after,
+.Toastify__toast--warning::after,
+.Toastify__toast--info::after {
+  position: absolute;
+  color: rgba(39, 39, 39, 1);
+  font-size: 15px;
+  font-family: "Plus Jakarta Sans", sans-serif;
+  font-weight: 700;
+  left: 265px;
+  padding-top: 14px !important;
+}
+
+@media only screen and (max-width: 768px) {
+  .Toastify__toast-container--top-center,
+  .Toastify__toast-container--top-left,
+  .Toastify__toast-container--top-right,
+  .Toastify__toast-container--bottom-center,
+  .Toastify__toast-container--bottom-left,
+  .Toastify__toast-container--bottom-right {
+    width: 100% !important;
+    height: auto !important;
+    padding: 15px !important;
+  }
+
+  .Toastify__toast-body {
+    padding: 0 !important;
+    height: 100px !important;
+  }
 }

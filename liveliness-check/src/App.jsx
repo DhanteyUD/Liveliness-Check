@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { TbAlertCircle } from "react-icons/tb";
 import { GoDotFill } from "react-icons/go";
 import { ToastContainer } from "react-toastify";
@@ -10,6 +10,16 @@ function App() {
   const [livelinessNote, setLivelinessNote] = useState(false);
   const [showLivelinessCheck, setShowLivelinessCheck] = useState(false);
   const [completedLiveliness, setCompletedLiveliness] = useState(false);
+  const [isMobile, setIsMobile] = useState(window.innerWidth <= 768);
+
+  useEffect(() => {
+    const handleResize = () => {
+      setIsMobile(window.innerWidth <= 768);
+    };
+
+    window.addEventListener("resize", handleResize);
+    return () => window.removeEventListener("resize", handleResize);
+  }, []);
 
   const startLivelinessCheck = (completedLiveliness) =>
     !completedLiveliness && setShowLivelinessCheck(true);
@@ -27,7 +37,7 @@ function App() {
         ) : (
           <div>
             <div
-              className={`w-[410px] h-[300px] p-10 flex items-center justify-center rounded-[20px] border-2 bounce-in-top ${
+              className={`w-[90vw] md:w-[410px] h-[300px] p-5 md:p-10 flex items-center justify-center rounded-[20px] border-2 bounce-in-top ${
                 completedLiveliness ? "border-[#18CF21]" : "border-[#FF3B30]"
               }`}
             >
@@ -48,7 +58,11 @@ function App() {
                     }`}
                     onClick={() => startLivelinessCheck(completedLiveliness)}
                   >
-                    {completedLiveliness ? "Completed" : "Click here to start"}
+                    {completedLiveliness
+                      ? "Completed"
+                      : isMobile
+                      ? "Click here"
+                      : "Click here to start"}
                   </p>
                   <GoDotFill
                     className={`text-[25px] ${
@@ -58,7 +72,7 @@ function App() {
                 </div>
 
                 {livelinessNote && (
-                  <div className="absolute top-[50px] left-0 w-full md:w-[330px] h-[100vh] md:h-[62px] bg-white flex justify-center items-center p-4 leading-[20px] tracking-normal z-[800] swing-in-top-fwd drop-shadow-2xl">
+                  <div className="absolute top-[45px] left-0 w-full md:w-[330px] min-h-[62px] bg-white flex justify-center items-center p-4 leading-[20px] tracking-normal z-[800] swing-in-top-fwd drop-shadow-2xl">
                     <p className="text-[#002564] text-[12px]">
                       <strong>Note:</strong> Please ensure you are in a well lit
                       environment before you begin the Liveliness check

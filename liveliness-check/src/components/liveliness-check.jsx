@@ -21,6 +21,7 @@ function LivelinessCheck({
   const [loading, setLoading] = useState(true);
   const step1Completed = useRef(false);
   const step2Completed = useRef(false);
+  const faceWarningShown = useRef(false);
   const [currentStep, setCurrentStep] = useState(0);
   const [isDetecting, setIsDetecting] = useState(false);
   const [isFaceDetected, setIsFaceDetected] = useState(false);
@@ -104,9 +105,13 @@ function LivelinessCheck({
 
       if (!detections) {
         setIsFaceDetected(false);
-        showToastWarning(
-          "Try moving closer to the camera and ensure your face is well lit."
-        );
+
+        if (!faceWarningShown.current) {
+          showToastWarning(
+            "Try moving closer to the camera and ensure your face is well lit."
+          );
+          faceWarningShown.current = true;
+        }
         return;
       }
 
@@ -115,20 +120,20 @@ function LivelinessCheck({
 
       //* Tilt Head Detection:
       const nose = landmarks.getNose();
-      const headTilted = Math.abs(nose[0]._x - nose[2]._x) > 10;
+      const headTilted = Math.abs(nose[0]._x - nose[2]._x) > 15;
 
       //* Open Mouth Detection:
       const mouth = landmarks.getMouth();
       const upperLipY = mouth[13]._y;
       const lowerLipY = mouth[17]._y;
       const mouthOpenness = Math.abs(lowerLipY - upperLipY);
-      const mouthOpen = mouthOpenness > 10;
+      const mouthOpen = mouthOpenness > 15;
 
       //* Nod Detection:
       const jaw = landmarks.getJawOutline();
       const jawY = jaw[8]._y;
       let nodded = false;
-      if (prevJawY !== null && Math.abs(jawY - prevJawY) > 10) {
+      if (prevJawY !== null && Math.abs(jawY - prevJawY) > 15) {
         nodded = true;
       }
       prevJawY = jawY;
@@ -202,7 +207,7 @@ function LivelinessCheck({
   }
 
   return (
-    <div className="flex flex-col items-center justify-center h-full w-full">
+    <div className="flex flex-col items-center justify-center h-full w-full">
       <div className="w-[200px] pt-2 pb-5 flex flex-col items-center gap-5 justify-center">
         {!isVerified ? (
           <p className="text-[#528DC2] font-[600]">
@@ -284,9 +289,11 @@ function LivelinessCheck({
         ) : null}
 
         {isVerified && completedLiveliness ? (
-          <Button onClick={() => setShowLivelinessCheck(false)}>
-            Continue
-          </Button>
+          <div className="absolute top-[60px] w-[200px] flex flex-col items-center justify-center text-center">
+            <Button onClick={() => setShowLivelinessCheck(false)}>
+              Continue
+            </Button>
+          </div>
         ) : null}
       </div>
     </div>

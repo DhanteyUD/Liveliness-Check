@@ -40,6 +40,12 @@ function LivelinessCheck({
     }
   }, [selectedActions]);
 
+  useEffect(() => {
+    if (selectedActions.length > 0) {
+      speak(selectedActions[0]);
+    }
+  }, [selectedActions]);
+
   const requestCameraAccess = async () => {
     try {
       const stream = await navigator.mediaDevices.getUserMedia({
@@ -71,6 +77,36 @@ function LivelinessCheck({
     }
   };
 
+  const speak = (text) => {
+    if ("speechSynthesis" in window) {
+      const utterance = new SpeechSynthesisUtterance(text);
+      utterance.lang = "en-US";
+      utterance.rate = 1;
+
+      const setVoice = () => {
+        const voices = speechSynthesis.getVoices();
+        const femaleVoice = voices.find(
+          (voice) =>
+            voice.name.includes("Female") ||
+            voice.name.includes("Google US English")
+        );
+
+        if (femaleVoice) {
+          utterance.voice = femaleVoice;
+        }
+        speechSynthesis.speak(utterance);
+      };
+
+      if (speechSynthesis.getVoices().length === 0) {
+        speechSynthesis.onvoiceschanged = setVoice;
+      } else {
+        setVoice();
+      }
+    } else {
+      showToastWarning("Speech synthesis is not supported in this browser.");
+    }
+  };
+
   const selectRandomActions = () => {
     const actions = [
       "Kindly tilt your head",
@@ -97,8 +133,8 @@ function LivelinessCheck({
         .detectSingleFace(
           video,
           new faceapi.TinyFaceDetectorOptions({
-            inputSize: 128,
-            scoreThreshold: 0.5,
+            inputSize: 256,
+            scoreThreshold: 0.7,
           })
         )
         .withFaceLandmarks();
@@ -120,20 +156,20 @@ function LivelinessCheck({
 
       //* Tilt Head Detection:
       const nose = landmarks.getNose();
-      const headTilted = Math.abs(nose[0]._x - nose[2]._x) > 15;
+      const headTilted = Math.abs(nose[0]._x - nose[2]._x) > 10;
 
       //* Open Mouth Detection:
       const mouth = landmarks.getMouth();
       const upperLipY = mouth[13]._y;
       const lowerLipY = mouth[17]._y;
       const mouthOpenness = Math.abs(lowerLipY - upperLipY);
-      const mouthOpen = mouthOpenness > 15;
+      const mouthOpen = mouthOpenness > 20;
 
       //* Nod Detection:
       const jaw = landmarks.getJawOutline();
       const jawY = jaw[8]._y;
       let nodded = false;
-      if (prevJawY !== null && Math.abs(jawY - prevJawY) > 15) {
+      if (prevJawY !== null && Math.abs(jawY - prevJawY) > 20) {
         nodded = true;
       }
       prevJawY = jawY;
@@ -170,6 +206,8 @@ function LivelinessCheck({
         ) {
           step1Completed.current = true;
           setCurrentStep(1);
+          speak("Good");
+          speak(selectedActions[1]);
         }
       } else if (!step2Completed.current) {
         if (
@@ -180,6 +218,7 @@ function LivelinessCheck({
         ) {
           step2Completed.current = true;
           setCurrentStep(2);
+          speak("Good");
 
           setIsVerified(true);
           setCompletedLiveliness(true);

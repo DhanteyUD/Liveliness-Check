@@ -17,10 +17,6 @@
   font-style: normal;
 }
 
-button {
-  background: #002564;
-}
-
 .swing-in-top-fwd {
   animation: swing-in-top-fwd 0.5s cubic-bezier(0.175, 0.885, 0.32, 1.275) both;
 }

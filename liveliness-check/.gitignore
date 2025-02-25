@@ -7,7 +7,9 @@ yarn-error.log*
 pnpm-debug.log*
 lerna-debug.log*
 
+.vscode
 .yarn
+.yarnrc.yml
 .pnp.cjs
 .pnp.loader.mjs
 
@@ -26,3 +28,4 @@ dist-ssr
 *.njsproj
 *.sln
 *.sw?
+.vercel

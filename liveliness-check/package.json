@@ -1,13 +1,12 @@
 {
   "name": "liveliness-check",
-  "packageManager": "yarn@4.6.0",
   "private": true,
   "version": "0.0.0",
   "type": "module",
   "engines": {
-    "node": "18.x",
-    "yarn": ">=1.22.0"
-  },
+  "node": "20.x",
+  "yarn": "1.22.22"
+},
   "scripts": {
     "dev": "vite",
     "build": "vite build",

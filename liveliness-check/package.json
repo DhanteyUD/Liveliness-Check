@@ -1,6 +1,6 @@
 {
   "name": "liveliness-check",
-  "packageManager": "yarn@1.22.22",
+  "packageManager": "yarn@4.6.0",
   "private": true,
   "version": "0.0.0",
   "type": "module",
